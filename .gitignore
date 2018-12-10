@@ -1,0 +1,14 @@
+*.out
+main.cpp
+main.py
+__pycache__
+run.sh
+script.py
+test.py
+test.cpp
+*.ipynb
+tree.cpp
+ans.cpp
+temp.cpp
+*.txt
+other.cpp
