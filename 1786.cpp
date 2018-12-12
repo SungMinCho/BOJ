@@ -11,42 +11,30 @@
 
 using namespace std;
 
-vector<int> getPi(const string& s, vector<int>& pi) {
+void getPi(const string& s, vector<int>& pi) {
   int m = s.size();
   pi.resize(m, 0);
-  int begin=1, match=0;
-  while(begin + match < m) {
-    if(s[match] == s[begin+match]) {
-      match++;
-      pi[begin+match-1] = match;
-    }
-    else {
-      if(match==0) begin++;
-      else {
-        begin += match - pi[match-1];
-        match = pi[match-1];
-      }
+  for(int i=1, j=0; i<m; i++) {
+    while(j && s[i] != s[j]) j = pi[j-1];
+    if(s[i] == s[j]) {
+      pi[i] = ++j;
     }
   }
-  return pi;
 }
 
-void getMatches(const string& s, const string& ss, vector<int>& ret) {
+void KMP(const string& s, const string& ss, vector<int>& ret) {
   int n = s.size();
   int m = ss.size();
   vector<int> pi;
   getPi(ss, pi);
-  int begin = 0, match = 0;
-  while(begin+match < n) {
-    if(match < m && s[begin+match] == ss[match]) {
-      match++;
-      if(match == m) ret.push_back(begin);
-    }
-    else {
-      if(match == 0) begin++;
-      else {
-        begin += match - pi[match-1];
-        match = pi[match-1];
+
+  for(int i=0, j=0; i<n; i++) {
+    while(j && s[i] != ss[j]) j = pi[j-1];
+    if(s[i] == ss[j]) {
+      j++;
+      if(j==m) {
+        ret.push_back(i-j+1);
+        j = pi[j-1];
       }
     }
   }
@@ -54,12 +42,14 @@ void getMatches(const string& s, const string& ss, vector<int>& ret) {
 
 int main() {
   ios_base::sync_with_stdio(false);
-  //cin.tie(NULL);
+
   string s, ss;
   getline(cin, s);
   getline(cin, ss);
+
   vector<int> ret;
-  getMatches(s, ss, ret);
+  KMP(s, ss, ret);
+
   cout << ret.size() << '\n';
   for(auto r : ret) cout << r+1 << '\n';
 }
