@@ -13,3 +13,4 @@ temp.cpp
 *.txt
 other.cpp
 log
+.vscode
